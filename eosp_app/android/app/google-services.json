@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "147026229448",
+    "project_id": "eosp-d1eb9",
+    "storage_bucket": "eosp-d1eb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147026229448:android:7e0e47529692f82599cdfd",
+        "android_client_info": {
+          "package_name": "com.github.bendup.eosp.eosp_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147026229448-0js9u1vs7cg9h32ogpq9u3a6u1iqbd2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKHKmIuesHGOOU4rJxKwGe_8vb9Y4h3lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147026229448-0js9u1vs7cg9h32ogpq9u3a6u1iqbd2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,19 +1,7 @@
 package com.github.bendup.eosp.eosp_app
 
-import io.flutter.app.FlutterApplication
-import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
-import io.flutter.plugins.GeneratedPluginRegistrant
-import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService
+import io.flutter.embedding.android.FlutterActivity;
 
+class Application: FlutterActivity() {
 
-class Application : FlutterApplication(), PluginRegistrantCallback {
-    fun onCreate() {
-        super.onCreate()
-        FlutterFirebaseMessagingService.setPluginRegistrant(this)
-    }
-
-    fun registerWith(registry: PluginRegistry?) {
-        GeneratedPluginRegistrant.registerWith(registry)
-    }
 }

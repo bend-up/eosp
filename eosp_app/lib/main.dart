@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,9 @@ import 'message_list.dart';
 import 'permissions.dart';
 import 'token_monitor.dart';
 
+import 'package:firebase_auth_ui/firebase_auth_ui.dart';
+import 'package:firebase_auth_ui/providers.dart';
+
 /// Define a top-level named handler which background/terminated messages will
 /// call.
 ///
@@ -26,7 +30,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  print("Handling a background message ${message.messageId} ${message.toString()}");
+  print("Handling a background message ${message.messageId} ${message
+      .toString()}");
 }
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
@@ -77,11 +82,12 @@ class MessagingExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Messaging Example App',
+      title: 'eOSP',
       theme: ThemeData.dark(),
       routes: {
         '/': (context) => Application(),
         '/message': (context) => MessageView(),
+        // '/login': (context) => LoginView(),
       },
     );
   }
@@ -118,6 +124,26 @@ class _Application extends State<Application> {
   @override
   void initState() {
     super.initState();
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User user) {
+      if (user == null) {
+        FirebaseAuthUi.instance()
+            .launchAuth(
+          [
+            AuthProvider.google(), // Login with Google
+          ],
+          tosUrl: "https://google.com", // Optional
+          privacyPolicyUrl:
+          "https://www.freeprivacypolicy.com/live/8b4988a4-14db-4982-a34b-b56707c1912b", // Optional,
+        )
+            .then((firebaseUser) => Navigator.pushNamed(context, '/'))
+            .catchError((error) => print("Błąd logowania: $error"));
+      } else {
+        print(user);
+      }
+    });
+
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage message) {
@@ -209,6 +235,11 @@ class _Application extends State<Application> {
           }
         }
         break;
+      case 'logout':
+        {
+          FirebaseAuth.instance.signOut();
+        }
+        break;
       default:
         break;
     }
@@ -218,7 +249,7 @@ class _Application extends State<Application> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cloud Messaging"),
+        title: Text("e-OSP"),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: onActionSelected,
@@ -236,17 +267,22 @@ class _Application extends State<Application> {
                   value: "get_apns_token",
                   child: Text("Get APNs token (Apple only)"),
                 ),
+                PopupMenuItem(
+                  value: "logout",
+                  child: Text("Logout"),
+                ),
               ];
             },
           ),
         ],
       ),
       floatingActionButton: Builder(
-        builder: (context) => FloatingActionButton(
-          onPressed: () => sendPushMessage(),
-          child: Icon(Icons.send),
-          backgroundColor: Colors.white,
-        ),
+        builder: (context) =>
+            FloatingActionButton(
+              onPressed: () => sendPushMessage(),
+              child: Icon(Icons.send),
+              backgroundColor: Colors.white,
+            ),
       ),
       body: SingleChildScrollView(
         child: Column(children: [
